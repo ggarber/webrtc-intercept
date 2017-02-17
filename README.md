@@ -24,14 +24,14 @@ This is the basic code you  need to copy and paste to intercept the PeerConnecti
         return new origPeerConnection(config, constraints);
     }
 
-    if (window.RTCPeerConnection) {
-      window.RTCPeerConnection = newPeerConnection;
+    if (origPeerConnection === window.RTCPeerConnection) {
+      window.RTCPeerConnection = peerconnection;
       window.RTCPeerConnection.prototype = origPeerConnection.prototype;
-    } else if (window.webkitRTCPeerConnection) {
-      window.webkitRTCPeerConnection = newPeerConnection;
+    } else if (origPeerConnection === window.webkitRTCPeerConnection) {
+      window.webkitRTCPeerConnection = peerconnection;
       window.webkitRTCPeerConnection.prototype = origPeerConnection.prototype;
-    } else {
-      window.mozRTCPeerConnection = newPeerConnection;
+    } else if (origPeerConnection === window.mozRTCPeerConnection) {
+      window.mozRTCPeerConnection = peerconnection;
       window.mozRTCPeerConnection.prototype = origPeerConnection.prototype;
     }
   }
