@@ -70,14 +70,14 @@ In some cases maybe you need to override the ICE servers used by default in the 
 
 ```
     var newPeerConnection = function(config, constraints) {
-        config.iceServes = [ 'turn:10.10.10.10' ];
+        config.iceServers = [ {urls: 'turn:10.10.10.10'} ];
         return new origPeerConnection(config, constraints);
     }
 ```
 
 ## Grab extra stats
 
-Sometimes you want to get your own statistics from PeerConnections for analytics or debugging purpouses:
+Sometimes you want to get your own statistics from PeerConnections for analytics or debugging purposes:
 
 ```
     var newPeerConnection = function(config, constraints) {
