@@ -30,13 +30,15 @@ created inside your library/framework/platform.
         return new origPeerConnection(config, constraints);
     }
 
-    if (origPeerConnection === window.RTCPeerConnection) {
+    if (window.RTCPeerConnection) {
       window.RTCPeerConnection = newPeerConnection;
       window.RTCPeerConnection.prototype = origPeerConnection.prototype;
-    } else if (origPeerConnection === window.webkitRTCPeerConnection) {
+    }
+    if (window.webkitRTCPeerConnection) {
       window.webkitRTCPeerConnection = newPeerConnection;
       window.webkitRTCPeerConnection.prototype = origPeerConnection.prototype;
-    } else if (origPeerConnection === window.mozRTCPeerConnection) {
+    }
+    if (window.mozRTCPeerConnection) {
       window.mozRTCPeerConnection = newPeerConnection;
       window.mozRTCPeerConnection.prototype = origPeerConnection.prototype;
     }
