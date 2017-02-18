@@ -117,3 +117,21 @@ This is a very strange use case but still a posibility.
         window.pc.createDtmfSender().insertDtmf(tones);
     }
 ```
+
+## Enable OPUS DTX
+
+You want to enable Discontinuous Transmission in OPUS to save bandwidth in audio traffic.
+
+```javascript
+    var newPeerConnection = function(config, constraints) {
+        console.log('PeerConnection created with config', config);
+
+        var pc = new origPeerConnection(config, constraints);
+        var origSetRemoteDescription = pc.setRemoteDescription.bind(pc);
+        pc.setRemoteDescription = (sdp, success, failure) => {
+        	sdp.sdp = sdp.sdp.replace("useinbandfec=1", "useinbandfec=1;usedtx=1");
+        	return origSetRemoteDescription(sdp, success, failure);
+        };
+        return pc;
+    }
+```
