@@ -120,7 +120,8 @@ This is a very strange use case but still a posibility.
 
 ## Enable OPUS DTX
 
-You want to enable Discontinuous Transmission in OPUS to save bandwidth in audio traffic.
+You want to enable [Discontinuous Transmission in OPUS](https://tools.ietf.org/html/rfc6716#section-2.1.9)
+to save bandwidth in audio traffic.
 
 ```javascript
     var newPeerConnection = function(config, constraints) {
@@ -129,8 +130,8 @@ You want to enable Discontinuous Transmission in OPUS to save bandwidth in audio
         var pc = new origPeerConnection(config, constraints);
         var origSetRemoteDescription = pc.setRemoteDescription.bind(pc);
         pc.setRemoteDescription = (sdp, success, failure) => {
-        	sdp.sdp = sdp.sdp.replace("useinbandfec=1", "useinbandfec=1;usedtx=1");
-        	return origSetRemoteDescription(sdp, success, failure);
+          sdp.sdp = sdp.sdp.replace("useinbandfec=1", "useinbandfec=1;usedtx=1");
+          return origSetRemoteDescription(sdp, success, failure);
         };
         return pc;
     }
