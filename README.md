@@ -34,7 +34,7 @@ created inside your library/framework/platform.
         // Override objects if they exist in the window object
         if (window.hasOwnProperty(obj)) {
             window[obj] = newPeerConnection;
-            window[obj].prototype =  newPeerConnection.prototype;
+            window[obj].prototype =  origPeerConnection.prototype;
         }
     });
   }
