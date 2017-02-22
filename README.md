@@ -28,7 +28,7 @@ created inside your library/framework/platform.
         // You can see some examples for specific use cases in the next sections of this document
 
         return new origPeerConnection(config, constraints);
-    }
+    };
 
     ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach(function(obj) {
         // Override objects if they exist in the window object
