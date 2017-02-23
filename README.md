@@ -34,7 +34,11 @@ created inside your library/framework/platform.
         // Override objects if they exist in the window object
         if (window.hasOwnProperty(obj)) {
             window[obj] = newPeerConnection;
-            window[obj].prototype =  origPeerConnection.prototype;
+            // Copy the static methods (generateCertificate in this case)
+            Object.keys(origPeerConnection).forEach( (x) =>
+                window[obj][x] = origPeerConnection[x];
+            );
+            window[obj].prototype = origPeerConnection.prototype;
         }
     });
   }
