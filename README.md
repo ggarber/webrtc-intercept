@@ -12,7 +12,7 @@ Contributions are more than welcomed. Write your ideas as
 [github issues](https://github.com/ggarber/webrtc-intercept/issues)
 or send a [Pull Request](https://github.com/ggarber/webrtc-intercept/pulls) to add new examples.
 
-## Basic overriding
+## Basic overriding of PeerConnection
 
 This is the basic code you  need to copy and paste to intercept the PeerConnections
 created inside your library/framework/platform.
@@ -47,6 +47,31 @@ created inside your library/framework/platform.
 
 In most of the cases it is very important that you call this code before loading the third party library.
 Otherwise it could be too late to intercept the PeerConnection constructor.
+
+## Basic overriding of getUserMedia
+
+This is the basic code you  need to copy and paste to intercept the getUserMedia
+created inside your library/framework/platform.
+
+```javascript
+(function() {
+  function wrap(gUM) {
+    return function() {
+      return gUM.apply(this, arguments);
+    };
+  }
+
+  if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia = wrap(navigator.mediaDevices.getUserMedia); 
+  }
+  ['getUserMedia', 'webkitGetUserMedia', 'mozGetUserMedia'].forEach(function(name) {
+    navigator[name] = wrap(navigator[name]);
+  });
+})();
+```
+
+In most of the cases it is very important that you call this code before loading the third party library.
+Otherwise it could be too late to intercept the getUserMedia calls.
 
 ## Enable DSCP
 
