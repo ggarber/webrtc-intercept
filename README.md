@@ -35,9 +35,7 @@ created inside your library/framework/platform.
         if (window.hasOwnProperty(obj)) {
             window[obj] = newPeerConnection;
             // Copy the static methods (generateCertificate in this case)
-            Object.keys(origPeerConnection).forEach( (x) =>
-                window[obj][x] = origPeerConnection[x];
-            );
+            Object.keys(origPeerConnection).forEach(x => window[obj][x] = origPeerConnection[x]);
             window[obj].prototype = origPeerConnection.prototype;
         }
     });
