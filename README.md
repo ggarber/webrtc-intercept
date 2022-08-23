@@ -18,6 +18,7 @@ This is the basic code you  need to copy and paste to intercept the PeerConnecti
 created inside your library/framework/platform.
 
 ```javascript
+window.pcs = [];
 (function() {
   var origPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
   if (origPeerConnection) {
@@ -27,7 +28,9 @@ created inside your library/framework/platform.
         // Add here the specific logic you need
         // You can see some examples for specific use cases in the next sections of this document
 
-        return new origPeerConnection(config, constraints);
+        const pc = new origPeerConnection(config, constraints);
+        window.pcs.push(pc);
+        return pc;
     };
 
     ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach(function(obj) {
@@ -161,4 +164,39 @@ to save bandwidth in audio traffic.
         };
         return pc;
     }
+```
+
+# Store PeerConnections in the global scope
+
+Sometimes you want to expose the PeerConnections in the global/window scope for further inspection.  This would be the whole snippet for that:
+
+```javascript
+window.pcs = [];
+(function() {
+  var origPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+  if (origPeerConnection) {
+    var newPeerConnection = function(config, constraints) {
+        console.log('PeerConnection created with config', config);
+
+        // Add here the specific logic you need
+        // You can see some examples for specific use cases in the next sections of this document
+
+        const pc = new origPeerConnection(config, constraints);
+        window.pcs.push(pc);
+        return pc;
+    };
+
+    ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach(function(obj) {
+        // Override objects if they exist in the window object
+        if (window.hasOwnProperty(obj)) {
+            window[obj] = newPeerConnection;
+            // Copy the static methods (generateCertificate in this case)
+            Object.keys(origPeerConnection).forEach((x) => {
+                window[obj][x] = origPeerConnection[x];
+            });
+            window[obj].prototype = origPeerConnection.prototype;
+        }
+    });
+  }
+})();
 ```
